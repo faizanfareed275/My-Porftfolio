@@ -1,9 +1,18 @@
+# ============================
+# Netlify Configuration File
+# ============================
+
 [build]
-  publish = "."
+  # Since it's a static site, we don’t need to run a build
+  publish = "."  # Serve files from the root directory
   command = "echo 'No build step required for static site'"
 
 [build.environment]
-  NODE_VERSION = "18"
+  NODE_VERSION = "18"  # Optional: define Node.js version (if needed for scripts)
+
+# ----------------------------
+# Custom HTTP Security Headers
+# ----------------------------
 
 [[headers]]
   for = "/*"
@@ -39,19 +48,23 @@
   [headers.values]
     Cache-Control = "public, max-age=86400"
 
+# ----------------------------
+# Redirects
+# ----------------------------
+
+# Example redirect for admin panel (optional)
 [[redirects]]
   from = "/admin"
   to = "/?admin=true"
   status = 302
 
-# Handle SPA routing (if needed in future)
+# 🔧 IMPORTANT: This fixes 404s for client-side routing (SPA behavior)
 [[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
-  conditions = {Role = ["admin"]}
 
-# Security redirects
+# Optional: force HTTPS for your domain (custom or Netlify subdomain)
 [[redirects]]
   from = "http://portfoliobyf.netlify.app/*"
   to = "https://portfoliobyf.netlify.app/:splat"
